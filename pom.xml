@@ -42,9 +42,6 @@
       <distribution>repo</distribution>
     </license>
   </licenses>
-  <prerequisites>
-    <maven>3.0</maven>
-  </prerequisites>
 
   <developers>
     <developer>
