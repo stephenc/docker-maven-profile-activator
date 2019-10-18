@@ -1,5 +1,6 @@
 package com.github.stephenc.docker.maven;
 
+import java.util.Locale;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.logging.Level;
@@ -35,7 +36,9 @@ public class DockerProfileActivator implements ProfileActivator {
             final Level oldLevel = noizyLogger.getLevel();
             try {
                 noizyLogger.setLevel(Level.WARNING);
-                DefaultDockerClient.fromEnv().build().ping();
+                try (DefaultDockerClient client = DefaultDockerClient.fromEnv().build()) {
+                    client.ping();
+                }
                 dockerPresent = true;
             } catch (DockerException | DockerCertificateException e) {
                 dockerPresent = false;
@@ -53,9 +56,10 @@ public class DockerProfileActivator implements ProfileActivator {
         if (!presentInConfig(profile, context, problems)) {
             return false;
         }
-        final String value = profile.getActivation().getProperty().getValue();
-        boolean required = value == null || Boolean.parseBoolean(value);
-        logger.debug("Profile " + profile.getId() + " is activated based on the availability of Docker");
+        boolean required = profile.getId().toLowerCase(Locale.ENGLISH).startsWith("[docker:available]");
+        logger.debug("Profile " + profile.getId() + " is activated based on the " + (required
+                ? "availability"
+                : "non-availability") + " of Docker");
         Boolean loggedBefore = logged.putIfAbsent(profile.getId(), required);
         if (isDockerPresent()) {
             if (loggedBefore == null || loggedBefore != required) {
@@ -84,15 +88,7 @@ public class DockerProfileActivator implements ProfileActivator {
 
     @Override
     public boolean presentInConfig(Profile profile, ProfileActivationContext context, ModelProblemCollector problems) {
-        if (profile.getActivation() == null) {
-            return false;
-        }
-        if (profile.getActivation().getProperty() == null) {
-            return false;
-        }
-        if (profile.getActivation().getProperty().getName() == null) {
-            return false;
-        }
-        return PROPERTY_NAME.equalsIgnoreCase(profile.getActivation().getProperty().getName().trim());
+        String s = profile.getId().toLowerCase(Locale.ENGLISH);
+        return s.startsWith("[docker:available]") || s.startsWith("[docker:unavailable]");
     }
 }
