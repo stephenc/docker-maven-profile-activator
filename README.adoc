@@ -1,3 +1,61 @@
 == Docker Maven Profile Activator
 
 An extension for Apache Maven that activates profiles based on whether a Docker client can ping the default Docker server detected for the current build environment.
+
+=== How to use
+
+First, at the root of your project you will need to create a `.mvn` directory with a `extensions.xml` inside it (if you don't have one already).
+
+The `.mvn/extensions.xml` file needs to include the extension, e.g.:
+
+[source,xml]
+----
+<?xml version="1.0" encoding="UTF-8"?>
+<extensions xmlns="http://maven.apache.org/EXTENSIONS/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:schemaLocation="http://maven.apache.org/EXTENSIONS/1.0.0 http://maven.apache.org/xsd/core-extensions-1.0.0.xsd">
+
+  <extension>
+    <groupId>com.github.stephenc.docker</groupId>
+    <artifactId>docker-maven-profile-activator</artifactId>
+    <version>1.1</version>
+  </extension>
+
+</extensions>
+----
+
+Then in your `pom.xml` just add the following to any profile you want activated when Docker is available:
+
+[source,xml]
+----
+      <activation>
+        <property>
+          <name>[docker:available]</name>
+        </property>
+      </activation>
+----
+
+or
+
+[source,xml]
+----
+      <activation>
+        <property>
+          <name>[docker:available]</name>
+          <value>true</value>
+        </property>
+      </activation>
+----
+
+If you want to activate a profile when Docker is not available then use:
+
+[source,xml]
+----
+      <activation>
+        <property>
+          <name>[docker:available]</name>
+          <value>false</value>
+        </property>
+      </activation>
+----
+
+Enjoy!

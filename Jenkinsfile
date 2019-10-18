@@ -56,7 +56,7 @@ pipeline {
                     // Publish the tag
                     sshagent(['github-ssh']) {
                         // using the full url so that we do not care if https checkout used in Jenkins
-                        sh 'git push git@github.com:stephenc/git-timestamp-maven-plugin.git $(cat TAG_NAME.txt)'
+                        sh 'git push git@github.com:stephenc/docker-maven-profile-activator.git $(cat TAG_NAME.txt)'
                     }
                     // Release the artifacts
                     withMaven(mavenLocalRepo: '.repository', mavenSettingsConfig: 'oss-sonatype-publish', maven:'maven-3', jdk:'java-8') {
