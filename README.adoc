@@ -1,0 +1,3 @@
+== Docker Maven Profile Activator
+
+An extension for Apache Maven that activates profiles based on whether a Docker client can ping the default Docker server detected for the current build environment.
