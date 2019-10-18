@@ -71,12 +71,12 @@ public class DockerProfileActivator implements ProfileActivator {
         } else {
             if (loggedBefore == null || loggedBefore != required) {
                 logger.info(required
-                        ? "Activating profile " + profile.getId() + " because Docker is not available"
-                        : "Not activating profile " + profile.getId() + " because Docker is not available");
+                        ? "Not activating profile " + profile.getId() + " because Docker is not available"
+                        : "Activating profile " + profile.getId() + " because Docker is not available");
             } else {
                 logger.debug(required
-                        ? "Activating profile " + profile.getId() + " because Docker is not available"
-                        : "Not activating profile " + profile.getId() + " because Docker is not available");
+                        ? "Not activating profile " + profile.getId() + " because Docker is not available"
+                        : "Activating profile " + profile.getId() + " because Docker is not available");
             }
             return !required;
         }
